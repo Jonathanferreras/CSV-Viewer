@@ -6,6 +6,13 @@
     <title></title>
   </head>
   <body>
+    <select onchange="filterByCategory()" id="catpicker">
+      <option value="All">All</option>
+      {% for title in category_titles %}
+        <option value="{{title}}">{{title}}</option>
+      {% endfor %}
+    </select>
+    <select id="subcatpicker"></select>
     <table class="container">
     	<thead>
     		<tr>
@@ -15,14 +22,33 @@
     		</tr>
     	</thead>
     	<tbody>
-        {% for row in data %}
+        {% for group in data %}
             <tr>
-            {% for d in row %}
-                <td>{{ d }}</td>
+            {% for field in fields %}
+                <td>{{ group[field] }}</td>
             {% endfor %}
             </tr>
         {% endfor %}
     	</tbody>
     </table>
+    <script type="text/javascript">
+      function filterByCategory(){
+        var categories_hash = {{categories|tojson}};
+        var selectCategory = document.getElementById("catpicker");
+        var selectSubCategory = document.getElementById("subcatpicker");
+        var selected = selectCategory.options[selectCategory.selectedIndex].value;
+        while(selectSubCategory.options.length){
+          selectSubCategory.remove(0);
+        }
+        var subCategory = categories_hash[selected];
+        if (subCategory){
+          var i;
+          for (var i = 0; i < subCategory.length; i++) {
+            var element = new Option(subCategory[i], i);
+            selectSubCategory.options.add(element);
+          }
+        }
+      }
+    </script>
   </body>
 </html>
