@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title></title>
+  </head>
+  <body>
+    <table class="container">
+    	<thead>
+    		<tr>
+          {% for field in fields %}
+    			<th><h1>{{field}}</h1></th>
+          {% endfor %}
+    		</tr>
+    	</thead>
+    	<tbody>
+        {% for row in data %}
+            <tr>
+            {% for d in row %}
+                <td>{{ d }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    	</tbody>
+    </table>
+  </body>
+</html>

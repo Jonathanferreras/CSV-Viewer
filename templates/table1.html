@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title></title>
+  </head>
+  <body>
+    <select id="car" onchange="filterByCategory()" id="catpicker">
+      <option value="All">All</option>
+      {% for title in category_titles %}
+        <option value="{{title}}">{{title}}</option>
+      {% endfor %}
+    </select>
+    <select id="subcatpicker"></select>
+
+    <table class="container">
+    	<thead>
+    		<tr>
+          {% for field in fields %}
+    			<th><h1>{{field}}</h1></th>
+          {% endfor %}
+    		</tr>
+    	</thead>
+    	<tbody>
+        {% for row in data %}
+            <tr>
+            {% for d in row %}
+                <td>{{ d }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    	</tbody>
+    </table>
+    <script type="text/javascript">
+      function filterByCategory(){
+        var categories_hash = {{categories|tojson}};
+        var selectCategory = document.getElementById("catpicker");
+        var selectSubCategory = document.getElementById("subcatpicker");
+        var selected = selectCategory.options[selectCategory.selectedIndex].value;
+
+        while(selectSubCategory.options.length){
+          selectSubCategory.remove(0);
+        }
+
+        var subCategory = categories_hash[selected];
+        if (subCategory){
+          var i;
+          for (var i = 0; i < subCategory.length; i++) {
+            var element = new Option(subCategory[i], i);
+            selectSubCategory.options.add(element);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

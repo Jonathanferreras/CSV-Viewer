@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="site-wrapper">
+  <div class="site-wrapper-inner">
+    <div class="cover-container">
+      <div class="masthead clearfix">
+        <div class="inner">
+          <h3 class="masthead-brand">Choose A Market</h3>
+        </div>
+      </div>
+      <div class="inner cover">
+        <div class="row">
+          <div class="col" id="market1">
+            <a href="{{ url_for('table1') }}" class="marketlink"><h5>Market1</h5></a>
+          </div>
+          <div class="col" id="market2">
+            <a href="{{ url_for('table2') }}" class="marketlink"><h5>Market2</h5></a>
+          </div>
+          <div class="col" id="market3">
+            <a href="{{ url_for('table3') }}" class="marketlink"><h5>Market3</h5></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
