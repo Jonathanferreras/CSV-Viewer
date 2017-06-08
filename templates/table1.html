@@ -6,7 +6,7 @@
     <title></title>
   </head>
   <body>
-    <select id="car" onchange="filterByCategory()" id="catpicker">
+    <select onchange="filterByCategory()" id="catpicker">
       <option value="All">All</option>
       {% for title in category_titles %}
         <option value="{{title}}">{{title}}</option>
@@ -23,10 +23,10 @@
     		</tr>
     	</thead>
     	<tbody>
-        {% for row in data %}
+        {% for group in data %}
             <tr>
-            {% for d in row %}
-                <td>{{ d }}</td>
+            {% for field in fields %}
+                <td>{{ group[field] }}</td>
             {% endfor %}
             </tr>
         {% endfor %}
@@ -35,6 +35,7 @@
     <script type="text/javascript">
       function filterByCategory(){
         var categories_hash = {{categories|tojson}};
+
         var selectCategory = document.getElementById("catpicker");
         var selectSubCategory = document.getElementById("subcatpicker");
         var selected = selectCategory.options[selectCategory.selectedIndex].value;
