@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title></title>
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block content %}
+    <button type="button" class="btn btn-default" aria-label="Left Align" id="back-home">
+      <a href="{{ url_for('home') }}">
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+      </span></a>
+    </button>
+
+    <input type="text" id="search_box" onkeyup="searchFunction()" placeholder="Search">
+
     <select onchange="filterByCategory()" id="catpicker">
       <option value="All">All</option>
       {% for title in category_titles %}
@@ -32,6 +34,11 @@
     	</tbody>
     </table>
     <script type="text/javascript">
+      function searchFunction(){
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("searchBox");
+
+      }
       function filterByCategory(){
         var categories_hash = {{categories|tojson}};
         var selectCategory = document.getElementById("catpicker");
@@ -50,5 +57,4 @@
         }
       }
     </script>
-  </body>
-</html>
+{% endblock %}
