@@ -1,60 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
-    <button type="button" class="btn btn-default" aria-label="Left Align" id="back-home">
-      <a href="{{ url_for('home') }}">
-        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
-      </span></a>
-    </button>
+<button type="button" class="btn btn-default" aria-label="Left Align" id="back-home">
+  <a href="{{ url_for('home') }}">
+    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+  </span></a>
+</button>
 
-    <input type="text" id="search_box" onkeyup="searchFunction()" placeholder="Search">
+<input type="text" id="searchBox" onkeyup="searchFunction()" placeholder="Search">
 
-    <select onchange="filterByCategory()" id="catpicker">
-      <option value="All">All</option>
-      {% for title in category_titles %}
-        <option value="{{title}}">{{title}}</option>
+<select onchange="filterByCategory()" id="catpicker">
+  <option value="All">All</option>
+  {% for title in category_titles %}
+    <option value="{{title}}">{{title}}</option>
+  {% endfor %}
+</select>
+<select id="subcatpicker"></select>
+<table class="container" id="dataTable">
+	<thead>
+		<tr>
+      {% for field in fields %}
+			<th><h1>{{field}}</h1></th>
       {% endfor %}
-    </select>
-    <select id="subcatpicker"></select>
-    <table class="container">
-    	<thead>
-    		<tr>
-          {% for field in fields %}
-    			<th><h1>{{field}}</h1></th>
-          {% endfor %}
-    		</tr>
-    	</thead>
-    	<tbody>
-        {% for group in data %}
-            <tr>
-            {% for field in fields %}
-                <td>{{ group[field] }}</td>
-            {% endfor %}
-            </tr>
+		</tr>
+	</thead>
+	<tbody>
+    {% for group in data %}
+        <tr>
+        {% for field in fields %}
+            <td>{{ group[field] }}</td>
         {% endfor %}
-    	</tbody>
-    </table>
-    <script type="text/javascript">
-      function searchFunction(){
-        var input, filter, table, tr, td, i;
-        input = document.getElementById("searchBox");
-
-      }
-      function filterByCategory(){
-        var categories_hash = {{categories|tojson}};
-        var selectCategory = document.getElementById("catpicker");
-        var selectSubCategory = document.getElementById("subcatpicker");
-        var selected = selectCategory.options[selectCategory.selectedIndex].value;
-        while(selectSubCategory.options.length){
-          selectSubCategory.remove(0);
+        </tr>
+    {% endfor %}
+	</tbody>
+</table>
+<script type="text/javascript">
+  function searchFunction(){
+    var input, filter, table, tr, td, i;
+    input = document.getElementById("searchBox");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("dataTable");
+    tr = table.getElementsByTagName("tr");
+    for (var i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[3];
+      if (td) {
+        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
         }
-        var subCategory = categories_hash[selected];
-        if (subCategory){
-          var i;
-          for (var i = 0; i < subCategory.length; i++) {
-            var element = new Option(subCategory[i], i);
-            selectSubCategory.options.add(element);
+        else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+  function filterByCategory(){
+    var categories_hash = {{categories|tojson}};
+    var selectCategory = document.getElementById("catpicker");
+    var selectSubCategory = document.getElementById("subcatpicker");
+    var selected = selectCategory.options[selectCategory.selectedIndex].value;
+    while(selectSubCategory.options.length){
+      selectSubCategory.remove(0);
+    }
+    var subCategory = categories_hash[selected];
+    if (subCategory){
+      var i;
+      for (var i = 0; i < subCategory.length; i++) {
+        var element = new Option(subCategory[i], subCategory[i]);
+        selectSubCategory.options.add(element);
+      }
+    }
+    selectSubCategory.addEventListener("change", filterBySubCategory(selectSubCategory));
+  }
+  function filterBySubCategory(selectSubCategory){
+    var filter, table, tr, td, j;
+    filter = selectSubCategory.options[selectSubCategory.selectedIndex].value;
+    if (filter) {
+      table = document.getElementById("dataTable");
+      tr = table.getElementsByTagName("tr");
+      for (var j = 0; j < tr.length; j++) {
+        td = tr[j].getElementsByTagName("td")[4];
+        if (td) {
+          if (td.innerHTML.indexOf(filter) > -1) {
+            tr[j].style.display = "";
+          }
+          else {
+            tr[j].style.display = "none";
           }
         }
       }
-    </script>
+    }
+  }
+</script>
 {% endblock %}

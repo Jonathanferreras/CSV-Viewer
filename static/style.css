@@ -194,6 +194,9 @@ h2 a {
 #back-home, #catpicker, #subcatpicker{
   display: inline-block;
 }
+#searchBox{
+  color: black;
+}
 .filter-cat{
   height: 10vh;
 }
